@@ -73,6 +73,12 @@ public class ItemController {
     /**
      * 이미지 파일 출력
      * 보안적인 문제는 무시하였으니, 실제 사용시에는 다른 방법을 사용하는 것을 권장함.
+     * <p>
+     * 컨트롤러에서 @ResponseBody을 사용하여 일반적인 객체를 반환하면 JSON 형태로 반환된다.
+     * 그런데 @ResponseBody + byte[]또는, Resource를 반환하는 경우 바이트 정보가 반환된다.
+     * View에서 <img> 태그의 경우 바이트 정보를 읽어서 이미지로 반환한다.
+     * <p>
+     * 스프링에서는 Resource를 리턴할 때 ResourceHttpMessageConverter가 해당 리소스의 바이트 정보를 응답 바디에 담아준다.
      *
      * @param filename
      * @return
