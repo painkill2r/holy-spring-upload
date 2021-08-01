@@ -43,6 +43,7 @@ public class ServletUploadControllerV2 {
 
         //각 Part 정보를 출력하고, 파일 저장
         for (Part part : parts) {
+            //Part가 제공하는 편의 메소드 사용
             log.info("===== PART =====");
             log.info("name={}", part.getName());
 
@@ -52,13 +53,12 @@ public class ServletUploadControllerV2 {
                 log.info("header {}: {}", headerName, part.getHeader(headerName));
             }
 
-            //편의 메소드
             //Content-Disposition: form-data; name="file"; filename="me.jpg"
-            log.info("submittedFilename={}", part.getSubmittedFileName()); //내부에서 filename을 가져옴
+            log.info("submittedFilename={}", part.getSubmittedFileName()); //내부에서 filename을 가져옴(클라이언트가 전송한 파일명)
             log.info("size={}", part.getSize());
 
             //데이터 읽기
-            InputStream inputStream = part.getInputStream();
+            InputStream inputStream = part.getInputStream(); //Part의 전송 데이터를 읽음
             String body = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);//스프링이 제공하는 StreamUtils를 사용하여 InputStream을 String으로 변환
             log.info("body={}", body);
 

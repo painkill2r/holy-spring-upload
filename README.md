@@ -115,3 +115,34 @@ public class ServletUploadControllerV1 {
    ```properties
    file.dir=파일 업로드 경로 설정(예. /Users/yoman/study/file/)
    ```
+
+## 스프링 파일 업로드
+
+1. 서블릿이 제공하는 Part는 편리하기는 하지만, `HttpServletRequest`를 사용해야 하고, 추가로 파일 부분만 구분하려면 여러가지 코드를 넣어야 한다.
+2. 스프링은 `MultipartFile`이라는 인터페이스를 제공하고, 이를 통해 `multipart/form-data` 방식으로 전송된 파일을 매우 편리하게 지원한다.
+    - 핸들러 메소드 파라미터에 업로드하는 HTML Form의 name에 맞추어 `@RequestParam MultipartFile`을 적용하면 된다.
+    - 추가로 `@ModelAttribute`에서도 MultipartFile을 동일하게 사용할 수 있다.
+   ```java
+   @Controller 
+   @RequestMapping("/spring") 
+   public class SpringUploadController {
+   
+      @Value("${file.dir}") private String fileDir;
+
+      @PostMapping("/upload") 
+      public String saveFile(@RequestParam String itemName, 
+                              @RequestParam MultipartFile file,
+                              HttpServletRequest request) throws IOException {
+
+         log.info("request={}", request); log.info("itemName={}", itemName); log.info("multipartFile={}", file);
+
+         if (!file.isEmpty()) { 
+            String fullPath = fileDir + file.getOriginalFilename(); 
+            log.info("파일 저장 fullPath={}", fullPath);
+            file.transferTo(new File(fullPath));
+         }
+      
+         return "upload-form";
+      }
+   }
+   ```
